@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css" rel="stylesheet">
+      @keyframes slide {
+        0% { transform: translate(0, 0) scale(1.5); }
+        20% { transform: translate(0, 0) scale(1.5); }
+        80% { transform: translate(0, -75%) scale(1.5); }
+        80% { transform: translate(0, -90%) scale(1.5); }
+      }
+      
+      html, body { position: absolute; margin: 0; padding: 0; width: 100%; height: 100%; left: 0; top: 0; overflow: hidden; }
+      body { background-color: #fff; }
+      .row { display: none; position: relative; height: 100%; white-space: nowrap; text-align: center; font-size: 0; }
+      .row.active { display: block; }
+      .row > img {
+        display: inline-block;
+        width: 50%;
+        height: 100%;
+        z-index: 1;
+        object-fit: contain;
+      }
+      .row > .num {
+        position: absolute;
+        right: 0; bottom: 0; width: 60px; height: 60px; line-height: 60px;
+        background-color: rgba(0, 0, 0, 0.2);
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .row::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 2px;
+        height: 100%;
+        top: 0;
+        left: 50%;
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      
+      body > .row { opacity: 1; }
+      body.fromMemory > .row { opacity: 0.03; }
+      
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        
+        let ind = 0;
+        let rows = [ ...document.querySelectorAll('.row') ];
+        
+        document.body.addEventListener('keydown', evt => {
+          
+          console.log(evt.key);
+          
+          if (evt.key.startsWith('Arrow')) {
+            
+            let oInd = ind;
+            if (evt.key === 'ArrowUp') ind--;
+            if (evt.key === 'ArrowDown') ind++;
+            
+            ind = Math.max(0, Math.min(ind, rows.length - 1));
+            if (ind !== oInd) {
+              document.querySelector('.row.active').classList.remove('active');
+              rows[ind].classList.add('active');
+            }
+            
+          } else if (evt.key === ' ') {
+            
+            document.body.classList.toggle('fromMemory');
+            
+          }
+          
+        });
+        
+      });
+    </script>
+  </head>
+  <body>
+    <div class="row active">
+      <div class="num">1</div>
+      <img src="./ww1.svg" />
+      <img src="./ww2.svg" />
+    </div>
+    <div class="row">
+      <div class="num">2</div>
+      <img src="./ww2.svg" />
+      <img src="./ww3.svg" />
+    </div>
+    <div class="row">
+      <div class="num">3</div>
+      <img src="./ww3.svg" />
+      <img src="./ww4.svg" />
+    </div>
+  </body>
+</html>

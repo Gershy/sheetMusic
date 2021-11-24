@@ -9,21 +9,16 @@
         80% { transform: translate(0, -90%) scale(1.5); }
       }
       
-      
       html, body { position: absolute; margin: 0; padding: 0; width: 100%; height: 100%; left: 0; top: 0; overflow: hidden; }
-      body {
-        background-color: #f0f0f0;
-      }
-      .row { display: none; position: relative; height: 100%; white-space: nowrap; text-align: center; }
+      body { background-color: #fff; }
+      .row { display: none; position: relative; height: 100%; white-space: nowrap; text-align: center; font-size: 0; }
       .row.active { display: block; }
-      .row > img { display: inline-block; height: 100%; margin: 0 auto; z-index: 1; }
-      .row > img.slide {
-        z-index: 2;
-        transform-origin: 50% 0%;
-        animation-name: slide;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-duration: 30000ms;
+      .row > img {
+        display: inline-block;
+        width: 50%;
+        height: 100%;
+        z-index: 1;
+        object-fit: contain;
       }
       .row > .num {
         position: absolute;
@@ -33,6 +28,20 @@
         font-weight: bold;
         text-align: center;
       }
+      .row::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 2px;
+        height: 100%;
+        top: 0;
+        left: 50%;
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      
+      body > .row { opacity: 1; }
+      body.fromMemory > .row { opacity: 0.03; }
+      
     </style>
     <script>
       window.addEventListener('load', () => {
@@ -42,14 +51,24 @@
         
         document.body.addEventListener('keydown', evt => {
           
-          let oInd = ind;
-          if (evt.key === 'ArrowUp') ind--;
-          if (evt.key === 'ArrowDown') ind++;
-          ind = Math.max(0, Math.min(ind, rows.length - 1));
+          console.log(evt.key);
           
-          if (ind !== oInd) {
-            document.querySelector('.row.active').classList.remove('active');
-            rows[ind].classList.add('active');
+          if (evt.key.startsWith('Arrow')) {
+            
+            let oInd = ind;
+            if (evt.key === 'ArrowUp') ind--;
+            if (evt.key === 'ArrowDown') ind++;
+            
+            ind = Math.max(0, Math.min(ind, rows.length - 1));
+            if (ind !== oInd) {
+              document.querySelector('.row.active').classList.remove('active');
+              rows[ind].classList.add('active');
+            }
+            
+          } else if (evt.key === ' ') {
+            
+            document.body.classList.toggle('fromMemory');
+            
           }
           
         });
